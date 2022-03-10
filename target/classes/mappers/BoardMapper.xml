@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.board.BoardMapper">
+	
+	<sql id="find">
+		<if test="findKey=='email'">
+			AND EMAIL LIKE '%' || #{findValue} ||'%'
+		</if>
+		<if test="findKey=='subject'">
+			AND SUBJECT LIKE '%' || #{findValue} ||'%'
+		</if>
+		<if test="findKey=='content'">
+			AND CONTENT LIKE '%' || #{findValue} ||'%'
+		</if>
+		<if test="findKey=='subcon'">
+			AND (SUBJECT LIKE '%' || #{findValue} ||'%'
+			   OR CONTENT LIKE '%' || #{findValue} ||'%')
+		</if>	
+	</sql>
+	
+	<!-- 전체게시물수 -->
+	<select id="selectTotCnt" resultType="int">
+		SELECT COUNT(*) TOTCNT
+		FROM BOARD
+		WHERE 1=1
+		<include refid="find"/>
+		AND REMOVEYN != 'y'
+	</select>
+	
+	<select id="selectList" resultType="Board">
+		SELECT * 
+		FROM(SELECT ROWNUM REPLYNUM, B.* 
+		       FROM (SELECT * FROM BOARD
+		       		WHERE 1=1 <!-- 조회조건(include가 없을수도 있다) -->
+					<include refid="find"/>
+					AND REMOVEYN != 'y'
+		            ORDER BY BOARDNUM DESC) B)
+		WHERE REPLYNUM BETWEEN #{startNum} AND #{endNum}           
+	</select>
+	
+	<select id="selectOne" resultType="Board">
+		SELECT * FROM BOARD
+		WHERE BOARDNUM = #{boardNum}
+	</select>
+	
+	<insert id="insert">
+	<!-- insert문을 실행하기 전에 시퀀스를 이용하여 boardNum을 구하고 board객체에 set -->
+		<selectKey keyProperty="boardNum" resultType="int" order="BEFORE">
+			SELECT B_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO BOARD(BOARDNUM,EMAIL,SUBJECT,CONTENT,IP)
+		VALUES(#{boaardNum}, #{email}, #{subject}, #{content},#{ip})
+	</insert>
+	
+	<update id="update">
+		UPDATE BOARD
+		SET EMAIL=#{email},
+			SUBJECT=#{subject},
+			CONTENT=#{content},
+			IP=#{ip}
+		WHERE BOARDNUM = #{boardNum}
+	</update>
+	<!-- DB상 삭제 -->
+	<delete id="delete">
+		DELETE FROM BOARD
+		WHERE BOARDNUM = #{boardNum}
+	</delete>
+	
+	<!-- 게시물 삭제(삭제시 removeyn을 y로 변경) -->
+	<update id="updateRemoveYn">
+		UPDATE BOARD
+		SET REMOVEYN = 'y'
+		WHERE BOARDNUM = #{boardNum}
+	</update>
+	
+	
+	<!-- 조회수+1 -->
+	<update id="updateReadCnt">
+		UPDATE BOARD
+		SET READCNT=READCNT+1
+		WHERE BOARDNUM = #{boardNum}
+	</update>
+	
+	<!-- 좋아요 + 1 -->
+	<update id="updateLikeCnt">
+		UPDATE BOARD
+		SET LIKECNT = LIKECNT + 1
+		WHERE BOARDNUM = #{boardNum}
+	</update> 
+	
+	<!-- 싫어요 + 1 -->
+	<update id="updateDisLikeCnt">
+		UPDATE BOARD
+		SET DISLIKECNT = DISLIKECNT + 1
+		WHERE BOARDNUM = #{boardNum}
+	</update> 
+	
+</mapper>

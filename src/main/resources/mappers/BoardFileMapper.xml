@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.board.BoardFileMapper">
+	<!-- 게시물들의 파일 -->
+	<select id="selectList" resultType="BoardFile">
+		SELECT * FROM BOARDFILE
+		WHERE BOARDNUM = #{boardNum}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO BOARDFILE(FILENUM, BOARDNUM, FILENAME)
+		VALUES(BF_SEQ.NEXTVAL, #{boardNum}, #{fileName})
+	</insert>
+	
+	<delete id="delete">
+		DELETE FROM BOARDFILE
+		WHERE FILENUM = #{fileNum}
+	</delete>
+</mapper>

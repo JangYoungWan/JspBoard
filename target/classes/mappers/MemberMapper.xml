@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.board.MemberMapper">
+	<select id="selectList" resultType="Member">
+		SELECT * FROM MEMBER
+		WHERE EMAIL LIKE concat('%',#{findValue},'%')
+
+	</select>
+	
+	<select id="selectOne" resultType="Member">
+		SELECT * FROM MEMBER
+		WHERE EMAIL = #{email}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO MEMBER (
+			EMAIL , PASSWD ,ZIPCODE , ADDR , ADDRDETAIL , FILENAME , EMAILAUTH , SIMPLEJOIN)
+		VALUES (#{email},#{passwd},#{zipcode},#{addr},#{addrDetail},#{fileName},#{emailAuth},#{simpleJoin})
+	</insert>
+	
+	<update id="update">
+		UPDATE MEMBER
+		SET PASSWD = #{passwd},
+		    ZIPCODE = #{zipcode}, 
+		    ADDR  = #{addr}, 
+		    ADDRDETAIL = #{addrDetail}, 
+		    FILENAME = #{fileName}
+		WHERE EMAIL = #{email}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM MEMBER
+		WHERE EMAIL = #{email}
+	</delete>
+	
+	<!-- 이메일 인증 --> 
+	<update id="update_emailAuth">
+		UPDATE MEMBER
+		SET EMAILAUTH='1'
+		WHERE EMAIL = #{email}
+	</update>
+</mapper>

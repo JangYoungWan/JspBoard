@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 데이터소스(mysql) -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/boarddb?serverTimezone=Asia/Seoul"/>
+		<property name="username" value=""/>
+		<property name="password" value=""/>
+	</bean>
+	<!-- 마이바티스 factory 객체생성 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:/mybatisConfig.xml"/>
+		<property name="mapperLocations" value="classpath:/mappers/**/*Mapper.xml"/>	
+	</bean>
+	<!-- 마이바티스 세션생성 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>	
+	
+	<!-- 트랜잭션 어노테이션 자동스캔 -->
+	
+	<tx:annotation-driven/> 
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!-- 파일저장경로 bean -->
+	<bean id="saveDir" class="java.lang.String">
+		<!-- 윈도우 --> 
+		<constructor-arg value="E:/hello/savedir/"/>
+		<!-- 리눅스 -->
+		<!-- <constructor-arg value="/var/lib/tomcat9/webapps/savedir/"/> -->
+	</bean>		
+	
+		<!-- 암호화 bean -->
+	<bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+	</bean>
+	
+	<!-- 이메일 전송 bean -->
+	<!-- host : 메일을 전송해줄 서버 -->
+	<!-- 백신,보안,방화벽체크 : 메일 전송 안될때 -->
+	<!-- 보안수준이 낮은 앱의 액세스허용-->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com"/> <!-- 구글 메일서버  -->
+		<property name="port" value="587"></property>
+		<property name="username" value="duddhks815@gmail.com"></property>
+		<property name="password" value="wlsdyd*815"></property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+				<!-- openjdk에서 사용 -->
+				<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+			</props>
+		</property>
+	</bean>
+	
+</beans>

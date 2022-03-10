@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.board.ReplyMapper">
+	
+	<select id="selectList" resultType="Reply">
+		SELECT * FROM REPLY
+		WHERE BOARDNUM = #{boardNum}
+		ORDER BY RESTEP
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO REPLY(REPLYNUM, BOARDNUM, EMAIL, CONTENT, IP, RESTEP, RELEVEL)
+		VALUES(R_SEQ.NEXTVAL, #{boardNum}, #{email}, #{content}, #{ip}, #{reStep}, #{reLevel})
+	</insert>
+	
+	<!-- 글순서(RESTEP+1) -->
+	<update id="updateRestep">
+		UPDATE REPLY
+		SET RESTEP = RESTEP + 1
+		WHERE BOARDNUM = #{boardNum}
+		  AND RESTEP >= #{reStep}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM REPLY
+		WHERE RNUM = #{replyNum}
+	</delete>
+
+	<update id="update">
+		UPDATE REPLY
+		SET CONTENT = #{content},
+		MODIDATE = now()
+		WHERE RNUM = #{replyNum}
+	</update>
+</mapper>
