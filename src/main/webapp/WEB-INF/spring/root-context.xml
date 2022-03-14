@@ -9,15 +9,15 @@
 	<!-- 데이터소스(mysql) -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/boarddb?serverTimezone=Asia/Seoul"/>
-		<property name="username" value=""/>
-		<property name="password" value=""/>
+		<property name="url" value="jdbc:mysql://localhost:3307/jspboard?serverTimezone=Asia/Seoul"/>
+		<property name="username" value="JspBoard"/>
+		<property name="password" value="coffee815"/>
 	</bean>
 	<!-- 마이바티스 factory 객체생성 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="configLocation" value="classpath:/mybatisConfig.xml"/>
-		<property name="mapperLocations" value="classpath:/mappers/**/*Mapper.xml"/>	
+		<property name="mapperLocations" value="classpath:/mappers/*Mapper.xml"/>	
 	</bean>
 	<!-- 마이바티스 세션생성 -->
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
@@ -34,7 +34,7 @@
 	<!-- 파일저장경로 bean -->
 	<bean id="saveDir" class="java.lang.String">
 		<!-- 윈도우 --> 
-		<constructor-arg value="E:/hello/savedir/"/>
+		<constructor-arg value="E:\BoardFolder\savedir"/>
 		<!-- 리눅스 -->
 		<!-- <constructor-arg value="/var/lib/tomcat9/webapps/savedir/"/> -->
 	</bean>		
@@ -50,8 +50,8 @@
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com"/> <!-- 구글 메일서버  -->
 		<property name="port" value="587"></property>
-		<property name="username" value="duddhks815@gmail.com"></property>
-		<property name="password" value="wlsdyd*815"></property>
+		<property name="username" value=""></property> <!-- 사용시 아이디 비밀번호 입력해야함 -->
+		<property name="password" value=""></property>
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.transport.protocol">smtp</prop>

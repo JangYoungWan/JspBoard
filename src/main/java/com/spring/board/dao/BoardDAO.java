@@ -13,7 +13,7 @@ public interface BoardDAO {
 	int delete(int boardNum);
 	
 	//전체 게시물 수
-	int selectTotcnt(Page page);
+	int selectTotCnt(Page page);
 	
 	//조회수 +1
 	int updateReadCnt(int boardNum);

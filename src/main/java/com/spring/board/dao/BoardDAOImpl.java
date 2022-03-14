@@ -41,8 +41,8 @@ public class BoardDAOImpl implements BoardDAO{
 	}
 
 	@Override
-	public int selectTotcnt(Page page) {
-		return session.selectOne("com.spring.board.BoardMapper.selectTotcnt", page);
+	public int selectTotCnt(Page page) {
+		return session.selectOne("com.spring.board.BoardMapper.selectTotCnt", page);
 	}
 
 	@Override

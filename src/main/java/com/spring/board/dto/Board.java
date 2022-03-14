@@ -11,7 +11,7 @@ public class Board {
 	private String subject; //제목
 	private String content; //내용
 	private int readCnt; //조회수
-	private int lickeCnt; //좋아요수
+	private int likeCnt; //좋아요수
 	private int dislikeCnt; //싫어요수
 	private String ip; //작성자의 ip
 	private Date regiDate; //등록일자
@@ -24,7 +24,7 @@ public class Board {
 		super();
 	}
 
-	public Board(int boardNum, String email, String subject, String content, int readCnt, int lickeCnt, int dislikeCnt,
+	public Board(int boardNum, String email, String subject, String content, int readCnt, int likeCnt, int dislikeCnt,
 			String ip, Date regiDate, Date modiDate, String removeYn, List<MultipartFile> files) {
 		super();
 		this.boardNum = boardNum;
@@ -32,7 +32,7 @@ public class Board {
 		this.subject = subject;
 		this.content = content;
 		this.readCnt = readCnt;
-		this.lickeCnt = lickeCnt;
+		this.likeCnt = likeCnt;
 		this.dislikeCnt = dislikeCnt;
 		this.ip = ip;
 		this.regiDate = regiDate;
@@ -81,12 +81,12 @@ public class Board {
 		this.readCnt = readCnt;
 	}
 
-	public int getLickeCnt() {
-		return lickeCnt;
+	public int getLikeCnt() {
+		return likeCnt;
 	}
 
-	public void setLickeCnt(int lickeCnt) {
-		this.lickeCnt = lickeCnt;
+	public void setLikeCnt(int lickeCnt) {
+		this.likeCnt = lickeCnt;
 	}
 
 	public int getDislikeCnt() {
@@ -140,7 +140,7 @@ public class Board {
 	@Override
 	public String toString() {
 		return "Board [boardNum=" + boardNum + ", email=" + email + ", subject=" + subject + ", content=" + content
-				+ ", readCnt=" + readCnt + ", lickeCnt=" + lickeCnt + ", dislikeCnt=" + dislikeCnt + ", ip=" + ip
+				+ ", readCnt=" + readCnt + ", likeCnt=" + likeCnt + ", dislikeCnt=" + dislikeCnt + ", ip=" + ip
 				+ ", regiDate=" + regiDate + ", modiDate=" + modiDate + ", removeYn=" + removeYn + ", files=" + files
 				+ "]";
 	}
