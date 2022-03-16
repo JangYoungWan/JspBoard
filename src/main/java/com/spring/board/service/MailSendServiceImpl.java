@@ -2,6 +2,10 @@ package com.spring.board.service;
 
 import java.util.Random;
 
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -39,10 +43,20 @@ public class MailSendServiceImpl implements MailSendService{
 		System.out.println(content.toString());
 		
 		//실서버 (나중에)
+		//content.append(email + "님 반갑습니다. 아래의 링크를 클릭해주세요.<br>");
+		//content.append("<a href='http://(실서버주소):8080/my/member/joinConfirm?authCode=" + authCode +"'>이메일인증확인</a>");
+		//System.out.println(content.toString());
 		
 		//보낼 메일 객체 생성
+		MimeMessage mimeMsg = javaMailSender.createMimeMessage();
+		mimeMsg.setContent("회원가입 이메일 인증", "utf-8");
+		mimeMsg.setText(content.toString(), "utf-8", "html");
+		mimeMsg.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 		
-		return null;
+		//메일보내기
+		javaMailSender.send(mimeMsg);
+		
+		return authCode;
 	}
 
 }

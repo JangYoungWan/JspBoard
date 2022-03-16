@@ -25,6 +25,9 @@ public class MemberServiceImpl implements MemberService{
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+	//이메일 인증
+	@Autowired
+	private MailSendService mailSendService;
 	
 	@Override
 	public List<Member> selectList(String findValue) {
@@ -63,6 +66,8 @@ public class MemberServiceImpl implements MemberService{
 		int cnt = memberDAO.insert(member); 
 		
 		//이메일 인증
+		String authCode = mailSendService.sendAuthMail(member.getEmail());
+		result.put("authCode", authCode);
 		
 		result.put("code", 0);
 		result.put("msg", "정상");
