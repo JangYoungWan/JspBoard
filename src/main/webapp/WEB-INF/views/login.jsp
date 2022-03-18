@@ -1,10 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="./include/includeFile.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript">
+	$(function() {
+		//로그인 버튼을 클릭했을때
+		$('#btnLogin').on('click', function() {
+			var email = $('#email').val();
+			var passwd = $('#passwd').val();
+			if (email==''){
+				alert('이메일을 입력해 주세요!');
+				$('#email').focus();
+			}else if (passwd==''){
+				alert('비밀번호를 입력해 주세요!');
+				$('#passwd').focus();
+			}else{
+				$('#frmLogin').attr('action', '${path}/login')
+							  .attr('method', 'post')
+							  .submit();
+			}
+			
+		});
+	});
+
+</script>
 </head>
 <body>
 	<div class="container">

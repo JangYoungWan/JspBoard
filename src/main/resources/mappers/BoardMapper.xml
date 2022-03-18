@@ -6,17 +6,17 @@
 	
 	<sql id="find">
 		<if test="findKey=='email'">
-			AND EMAIL LIKE '%' || #{findValue} ||'%'
+			AND EMAIL LIKE CONCAT('%' , #{findValue} , '%')
 		</if>
 		<if test="findKey=='subject'">
-			AND SUBJECT LIKE '%' || #{findValue} ||'%'
+			AND SUBJECT LIKE CONCAT('%' , #{findValue} , '%')
 		</if>
 		<if test="findKey=='content'">
-			AND CONTENT LIKE '%' || #{findValue} ||'%'
+			AND CONTENT LIKE CONCAT('%' , #{findValue} , '%')
 		</if>
 		<if test="findKey=='subcon'">
-			AND (SUBJECT LIKE '%' || #{findValue} ||'%'
-			   OR CONTENT LIKE '%' || #{findValue} ||'%')
+			AND (SUBJECT LIKE CONCAT('%' , #{findValue} , '%')
+			   OR CONTENT LIKE CONCAT('%' , #{findValue} , '%'))
 		</if>	
 	</sql>
 	
@@ -30,14 +30,12 @@
 	</select>
 	
 	<select id="selectList" resultType="Board">
-		SELECT * 
-		FROM(SELECT ROWNUM REPLYNUM, B.* 
-		       FROM (SELECT * FROM BOARD
-		       		WHERE 1=1 <!-- 조회조건(include가 없을수도 있다) -->
-					<include refid="find"/>
-					AND REMOVEYN != 'y'
-		            ORDER BY BOARDNUM DESC) B)
-		WHERE REPLYNUM BETWEEN #{startNum} AND #{endNum}           
+		SELECT * FROM BOARD
+		WHERE 1=1  <!-- 조회조건(include가 없을수도 있다) -->
+		<include refid="find"/>
+		AND REMOVEYN != 'y'
+		ORDER BY BOARDNUM DESC
+		limit #{startNum} , #{perPage}         
 	</select>
 	
 	<select id="selectOne" resultType="Board">
@@ -45,21 +43,18 @@
 		WHERE BOARDNUM = #{boardNum}
 	</select>
 	
-	<insert id="insert">
-	<!-- insert문을 실행하기 전에 시퀀스를 이용하여 boardNum을 구하고 board객체에 set -->
-		<selectKey keyProperty="boardNum" resultType="int" order="BEFORE">
-			SELECT B_SEQ.NEXTVAL FROM DUAL
-		</selectKey>
-		INSERT INTO BOARD(BOARDNUM,EMAIL,SUBJECT,CONTENT,IP)
-		VALUES(#{boaardNum}, #{email}, #{subject}, #{content},#{ip})
+	<!-- useGeneratedKeys : 자동으로 생성된 키를 board의 boardNum에 세팅 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="boardNum">
+		INSERT INTO BOARD(EMAIL,SUBJECT,CONTENT,IP)
+		VALUES(#{email}, #{subject}, #{content}, #{ip})
 	</insert>
-	
 	<update id="update">
 		UPDATE BOARD
 		SET EMAIL=#{email},
 			SUBJECT=#{subject},
 			CONTENT=#{content},
 			IP=#{ip}
+			MODIDATE = now()
 		WHERE BOARDNUM = #{boardNum}
 	</update>
 	<!-- DB상 삭제 -->

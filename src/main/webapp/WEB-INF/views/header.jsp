@@ -13,7 +13,7 @@
 			$('#logout').hide();
 			$('#list').hide();
 		}else{
-			$('#loginInfo').hide();
+			$('#loginInfo').show();
 			$('#login').hide();
 			$('#join').hide();
 			
@@ -26,11 +26,15 @@
 	<header>
 		<div> <h2>게시물 관리</h2> </div>
 	 	<div id="memberInfo">
-	 		<div id="loginInfo"><a href="${path}/member/modify?email=${sessionScope.email}">${sessionScope.email}</a></div>
+	 		<div id="loginInfo">
+	 			<a href="${path}/member/modify?email=${sessionScope.email}">${sessionScope.email}</a>
 	 		</div>
-	 		<div><a href="${path}/login" id="login">로그인</a></div>
-	 		<div><a href="${path}/logout" id="logout">로그아웃</a></div>
-	 		<div><a href="${path}/member/join" id="join">회원가입</a></div>
+	 	</div>
+	 		<div>
+	 			<a href="${path}/login" id="login">로그인</a>
+	 			<a href="${path}/logout" id="logout">로그아웃</a>
+	 			<a href="${path}/member/join" id="join">회원가입</a>
+	 		</div>
 	</header>
 	<hr>
 	<nav>
